@@ -55,7 +55,6 @@ docker-compose up --build
 
 This will start the following services:
 - Node.js backend
-- SQLite database
 - Redis for queue management
 - NGINX reverse proxy
 
