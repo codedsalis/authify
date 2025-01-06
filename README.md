@@ -62,7 +62,7 @@ This will start the following services:
 ---
 
 ### 4. Link to documentation
-Once all services have started, you can go to https://localhost:3000/api to test the available endpoints
+Once all services have started, you can go to http://localhost:3000/api to test the available endpoints
 
 ## Development
 
