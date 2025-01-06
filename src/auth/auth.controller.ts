@@ -70,7 +70,7 @@ export class AuthController {
   }
 
   @SkipAuth()
-  @Throttle({ default: { ttl: 10, limit: 2 } })
+  @Throttle({ default: { ttl: 60, limit: 5 } })
   @Patch('reset-password')
   @ApiBody({ type: PasswordResetDto })
   @ApiResponse({ type: ForgotPasswordResponse, status: HttpStatus.OK })
