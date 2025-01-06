@@ -61,6 +61,9 @@ This will start the following services:
 
 ---
 
+### 4. Link to documentation
+Once all services have started, you can go to https://localhost:3000/api to test the available endpoints
+
 ## Development
 
 ### Install Dependencies
@@ -94,13 +97,7 @@ npm run build
 ### Run Unit Tests
 
 ```bash
-npm run test
-```
-
-### Run End-to-End Tests
-
-```bash
-npm run test:e2e
+npm test
 ```
 
 ---
