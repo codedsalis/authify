@@ -9,6 +9,9 @@ import { BullModule } from '@nestjs/bullmq';
 import { mailerConfig } from './config/mailer.config';
 import redisConfig from '@authify/config/redis.config';
 import appConfig from '@authify/config/app.config';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { CustomThrottlerGuard } from './common/guards/custom-throttler.guard';
 
 @Module({
   imports: [
@@ -22,14 +25,13 @@ import appConfig from '@authify/config/app.config';
         }),
       ],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: (config: ConfigService) => ({
         type: 'better-sqlite3',
-        database: configService.get<string>('DB_PATH'),
+        database: config.get<string>('DB_PATH'),
         autoLoadEntities: true,
         synchronize: true,
         logging:
-          configService.get<string>('appConfig.environment') ===
-            'development' && true,
+          config.get<string>('appConfig.environment') === 'development' && true,
       }),
     }),
     MailerModule.forRoot(mailerConfig),
@@ -41,19 +43,30 @@ import appConfig from '@authify/config/app.config';
         }),
       ],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: (config: ConfigService) => ({
         connection: {
-          host: configService.get<string>('redisConfig.host'),
-          port: configService.get<number>('redisConfig.port'),
+          host: config.get<string>('redisConfig.host'),
+          port: config.get<number>('redisConfig.port'),
         },
       }),
     }),
+    ThrottlerModule.forRoot([
+      {
+        limit: 10,
+        ttl: 60,
+      },
+    ]),
     BullModule.registerQueue({
       name: 'email',
     }),
     EmailModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: CustomThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

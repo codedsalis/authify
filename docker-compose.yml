@@ -11,7 +11,6 @@ services:
     ports:
       - "${NODE_PORT:-3000}:${NODE_PORT:-3000}"
     depends_on:
-      - sqlite
       - redis
     command: sh -c "npm install && npm run start:dev"
     environment:
@@ -24,15 +23,6 @@ services:
       - MAIL_PASSWORD=${MAIL_PASSWORD}
       - MAIL_FROM=${MAIL_FROM}
       - JWT_SECRET=${JWT_SECRET}
-
-  # SQLite
-  sqlite:
-    image: nouchka/sqlite3
-    container_name: sqlite-db
-    volumes:
-      - ./${DB_PATH}:/data
-    command: ["sqlite3", "data/${DB_PATH:-database.db}"]
-    environment:
       - DB_PATH=${DB_PATH:-database.db}
 
   # Redis

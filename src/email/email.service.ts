@@ -19,6 +19,5 @@ export class EmailService {
       template,
       context,
     });
-    console.log('Added email to queue');
   }
 }
