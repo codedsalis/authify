@@ -12,7 +12,7 @@ export class CustomThrottlerGuard extends ThrottlerGuard {
     Logger.debug(`Calculated TTL: ${ttl}`);
     res.header('X-RateLimit-Limit', limit);
     res.header('X-RateLimit-Remaining', Math.max(0, remainingPoints - 1));
-    res.header('X-RateLimit-Reset', Math.ceil(20)); // Ensure TTL is valid
+    res.header('X-RateLimit-Reset', Math.ceil(ttl));
   }
 
   protected getTracker(req: Record<string, any>): Promise<string> {
